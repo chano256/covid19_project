@@ -4,11 +4,10 @@ This project is to display tweet information gathered from API into graphs using
 Technologies Used:<br>
 Python 3 = http://python.org </br>
 Python (Django) - https://www.djangoproject.com/ </br>
-Chart.js - http://chartjs.org </br>
-High Charts Maps - https://www.highcharts.com/maps/demo </br>
 
 # How to install:<br>
-
+Install the requirements with: pip install -r /path/to/requirements.txt </br>
+Run python3 manage.py runserver
 
 # Screenshots:<br>
 
