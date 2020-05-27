@@ -4,3 +4,4 @@ notebook==.0.3
 numpy==1.18.4
 matplotlib==3.2.1
 requests==2.23.0
+HTTPBasicAuth
