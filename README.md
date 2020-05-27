@@ -7,7 +7,7 @@ Python (Django) - https://www.djangoproject.com/ </br>
 
 # How to install:<br>
 Install the requirements with: pip install -r /path/to/requirements.txt </br>
-Run python3 manage.py runserver
+Run on terminal: python3 manage.py runserver
 
 # Screenshots:<br>
 
