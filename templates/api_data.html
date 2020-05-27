@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body{
+                padding-top: 60px;
+                padding-bottom: 40px;
+            }
+            .fixed-header, .fixed-footer{
+                width: 100%;
+                position: fixed;
+                background: #333;
+                padding: 10px 0;
+                color: #fff;
+            }
+            .fixed-header{
+                top: 0;
+                left: 0;
+            }
+            .fixed-footer{
+                bottom: 0;
+            }
+            .container{
+                width: 80%;
+                margin: 0 auto;
+            }
+            nav a{
+                color: #fff;
+                text-decoration: none;
+                padding: 7px 25px;
+                display: inline-block;
+            }
+            .content_list ul li{
+                padding-right: 10px;
+                list-style-type: none;
+                padding-bottom: 10px;
+            }
+            .content_list ul li a{
+                text-decoration: none;
+            }
+            .form_list{
+                list-style-type: none;
+            }
+            .form_list li{
+                padding-bottom: 5px;
+            }
+        </style>
+
+        <title>Api Data</title>
+    </head>
+
+    <body>
+        <div class="fixed-header">
+            <div class="">
+                <nav>
+                    <a href="/"><span style="font-size: 40px;">Covid19 Dashboard</span></a>
+                </nav>
+            </div>
+        </div>
+
+        <div class="col-lg-12" style="max-width: 1200px;">
+            <div class="col-lg-3" style="float: left; max-height: 650px; max-width: 250px; overflow: hidden; overflow-x: hidden;">
+                <h3 style="margin-left: 30px;">Contents</h1>
+                    <div class="content_list">
+                        <ul>
+                            <li><a href="/">Home</a></li>
+                            <li><a href="api_data">Api Data</a></li>
+                            <li><a href="showmap">Map</a></li>
+                            <li><a href="contact">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul class="form_list">
+                        <form method="POST" enctype="multipart/form-data" action="selecteditem">
+                            {% csrf_token %}
+                            {% for item in xAxis %}
+                                <li><input type="submit" value="{{item}}" name="item"></li>
+                            {% endfor %}
+                        </form>
+                    </ul>
+                    </div>
+            </div>
+
+            <div class="col-lg-9" style="float: right; width: 950px; padding-top: 25px;">
+                
+            </div>
+        </div>
+    </body>
+</html>

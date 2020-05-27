@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body{
+                padding-top: 60px;
+                padding-bottom: 40px;
+            }
+            .fixed-header, .fixed-footer{
+                width: 100%;
+                position: fixed;
+                background: #333;
+                padding: 10px 0;
+                color: #fff;
+            }
+            .fixed-header{
+                top: 0;
+                left: 0;
+            }
+            .fixed-footer{
+                bottom: 0;
+            }
+            .container{
+                width: 80%;
+                margin: 0 auto;
+            }
+            nav a{
+                color: #fff;
+                text-decoration: none;
+                padding: 7px 25px;
+                display: inline-block;
+            }
+            .content_list ul li{
+                padding-right: 10px;
+                list-style-type: none;
+                padding-bottom: 10px;
+            }
+            .content_list ul li a{
+                text-decoration: none;
+            }
+            .form_list{
+                list-style-type: none;
+            }
+            .form_list li{
+                padding-bottom: 5px;
+            }
+        </style>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+        <title>Covid19 Graphs</title>
+    </head>
+
+    <body>
+        <div class="fixed-header">
+            <div class="">
+                <nav>
+                    <a href="/"><span style="font-size: 40px;">Covid19 Dashboard</span></a>
+                </nav>
+            </div>
+        </div>
+        <div class="col-lg-12" style="max-width: 1200px;">
+            <div class="col-lg-3" style="float: left; max-height: 650px; max-width: 250px; overflow: hidden; overflow-x: hidden;">
+                <h3 style="margin-left: 30px;">Contents</h1>
+                    <div class="content_list">
+                        <ul>
+                            <li><a href="/">Home</a></li>
+                            <li><a href="api_data">Api Data</a></li>
+                            <li><a href="showmap">Map</a></li>
+                            <li><a href="contact">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul class="form_list">
+                        <form method="POST" enctype="multipart/form-data" action="selecteditem">
+                            {% csrf_token %}
+                            {% for item in xAxis %}
+                                <li><input type="submit" value="{{item}}" name="item"></li>
+                            {% endfor %}
+                        </form>
+                    </ul>
+                    </div>
+            </div>
+
+            <div class="col-lg-9" style="float: right; width: 950px; padding-top: 25px;">
+                {% if showGraph == 'True' %}
+                    <canvas id="myChart"></canvas>
+                {% elif showGraph == 'False' %}
+                    <canvas id="lineChart"></canvas>
+                {% endif %}
+                <div class="" style="padding-top: 125px;">
+                    <canvas id="doughnut"></canvas>
+                </div>
+            </div>
+        </div>
+    </body>
+    
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        
+        var chart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'bar',
+
+            // The data for our dataset
+            data: {
+                labels: {{values|safe}},
+                datasets: [{
+                    label: 'counts',
+                    backgroundColor: [
+                    'rgb(146, 255, 32)',
+                    'rgb(14, 55, 22)',
+                    'rgb(46, 5, 132)',
+                    'rgb(80, 105, 182)',
+                    'rgb(6, 155, 232)',
+                    'rgb(200, 255, 100)',
+                    'rgb(180, 55, 250)',
+                    ],
+                    borderColor: 'rgb(80, 211, 130)',
+                    data: {{yAxis|safe}},
+                }]
+            },
+
+            // Configuration options go here
+            options: {}
+        });
+    </script>
+
+    <script>
+        var ctx2 = document.getElementById('lineChart').getContext('2d');
+
+        var myLineChart = new Chart(ctx2, {
+        type: 'line',
+        
+        data: {
+                labels: {{xAxis|safe}},
+                datasets: [{
+                    label: 'counts',
+                    backgroundColor: [
+                        'rgb(80, 211, 130)',
+                        'rgb(146, 255, 32)',
+                        'rgb(14, 55, 22)',
+                        'rgb(46, 5, 132)',
+                        'rgb(6, 155, 232)',
+                        'rgb(200, 255, 100)',
+                        'rgb(180, 55, 250)',
+                    ],
+                    borderColor: [
+                        'rgb(255, 95, 232)'],
+                    borderDash: [5, 5],
+                    fill: false,
+                    data: {{yAxis|safe}},
+                }]
+            },
+
+        options: {}
+    });
+    </script>
+
+    <script>
+        // And for a doughnut chart
+        var ctx3 = document.getElementById('doughnut').getContext('2d');
+
+        var myDoughnutChart = new Chart(ctx3, {
+        type: 'doughnut',
+        
+        data: {
+                labels: {{xAxis|safe}},
+                datasets: [{
+                    label: 'counts',
+                    backgroundColor: [
+                        'rgb(14, 55, 22)',
+                        'rgb(6, 155, 232)',
+                        'rgb(14, 255, 32)',
+                        'rgb(79, 211, 120)',
+                        'rgb(200, 255, 100)',
+                        'rgb(180, 55, 250)',
+                        'rgb(8, 21, 130)',
+                        'rgb(146, 255, 32)',
+
+                        ],
+                    borderColor: 'rgb(180, 121, 48)',
+                    data: {{yAxis|safe}},
+                }]
+            },
+
+        options: {}
+    });
+    </script>
+</html>
