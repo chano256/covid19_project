@@ -44,6 +44,9 @@
             .form_list li{
                 padding-bottom: 5px;
             }
+            .graphTitle{
+                padding-left: 300px;
+            }
         </style>
 
         <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
@@ -60,18 +63,19 @@
             </div>
         </div>
         <div class="col-lg-12" style="max-width: 1200px;">
-            <div class="col-lg-3" style="float: left; max-height: 650px; max-width: 250px; overflow: hidden; overflow-x: hidden;">
+            <div class="col-lg-3" style="float: left; max-width: 250px;">
                 <h3 style="margin-left: 30px;">Contents</h1>
-                    <div class="content_list">
-                        <ul>
-                            <li><a href="/">Home</a></li>
-                            <li><a href="api_data">Api Data</a></li>
-                            <li><a href="showmap">Map</a></li>
-                            <li><a href="contact">Contact</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <ul class="form_list">
+                <div class="content_list">
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="api_data">Api Data</a></li>
+                        <li><a href="showmap">Map</a></li>                            <li><a href="contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div><h4 style="margin-left: 30px;">Scroll to View ID</h6></div>
+                <div style="float: left;  max-height: 300px; overflow: scroll; overflow-x:hidden; padding-bottom: 10px;">
+                    <h6 style="margin-left: 30px;">Click to show Retweet Count</h6>
+                    <ul class="form_list">
                         <form method="POST" enctype="multipart/form-data" action="selecteditem">
                             {% csrf_token %}
                             {% for item in xAxis %}
@@ -79,17 +83,43 @@
                             {% endfor %}
                         </form>
                     </ul>
-                    </div>
+                </div>
+
+                <div><h4 style="margin-left: 30px;">Scroll to view Username</h6></div>
+                <div style="float: left;  max-height: 300px; overflow: scroll; overflow-x:hidden;">
+                    <h6 style="margin-left: 30px;">Click to show Friends Count</h6>
+                    <ul class="form_list">
+                        <form method="POST" enctype="multipart/form-data" action="selecteditem">
+                            {% csrf_token %}
+                            {% for item in xValues %}
+                                <li><input type="submit" value="{{item}}" name="item"></li>
+                            {% endfor %}
+                        </form>
+                    </ul>
+                </div>
             </div>
 
-            <div class="col-lg-9" style="float: right; width: 950px; padding-top: 25px;">
-                {% if showGraph == 'True' %}
-                    <canvas id="myChart"></canvas>
-                {% elif showGraph == 'False' %}
-                    <canvas id="lineChart"></canvas>
-                {% endif %}
-                <div class="" style="padding-top: 125px;">
-                    <canvas id="doughnut"></canvas>
+            <div class="col-lg-9" style="padding-top: 25px; float: right; width: 950px;">
+                <div class="col-lg-12">
+                    {% if showGraph == 'True' %}
+                        <div>
+                            <h4 class="graphTitle">A Bar Graph Showing userIDs to the Retweet Count</h4>
+                            <canvas id="myChart"></canvas>
+                        </div>
+                        <div>
+                            <h4 class="graphTitle">A Line Graph Showing Username to the Friends Count</h4>
+                            <canvas id="lineChart2"></canvas>
+                        </div>
+                    {% elif showGraph == 'False' %}
+                        <div>
+                            <h4 class="graphTitle">A Line Graph Showing userIDs to the Retweet Count</h4>
+                            <canvas id="lineChart"></canvas>
+                        </div>
+                        <div>
+                            <h4 class="graphTitle">A Bar Graph Showing Username to the Friends Count</h4>
+                            <canvas id="myChart2"></canvas>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -97,6 +127,32 @@
     
     <script>
         var ctx = document.getElementById('myChart').getContext('2d');
+
+        var chartOptions = {
+            legend: {
+                display: true,
+            },
+            scales: {
+                xAxes: [
+                    {barPercentage:1},
+                    //{ticks: {display:false}},
+                    //{ticks: {mirror: false}},
+                    //{display: false},
+                ],
+                yAxes: [
+                    //{barPercentage: 1},
+                    //{gridLines:{drawBorder: false}},
+                    //{ticks: {display:false}},
+                    //{ticks: {mirror: true}},
+                    //{display: false},
+                ],
+                elements: {
+                    rectangle: {
+                        borderSkipped: 'right',
+                    }
+                }
+            }
+        };
         
         var chart = new Chart(ctx, {
             // The type of chart we want to create
@@ -104,25 +160,19 @@
 
             // The data for our dataset
             data: {
-                labels: {{values|safe}},
+                labels: {{xAxis|safe}},
                 datasets: [{
-                    label: 'counts',
-                    backgroundColor: [
-                    'rgb(146, 255, 32)',
-                    'rgb(14, 55, 22)',
-                    'rgb(46, 5, 132)',
-                    'rgb(80, 105, 182)',
-                    'rgb(6, 155, 232)',
-                    'rgb(200, 255, 100)',
-                    'rgb(180, 55, 250)',
+                    label: [
+                        'retweet_count',
                     ],
+                    backgroundColor: 'rgb(80, 105, 182)',
                     borderColor: 'rgb(80, 211, 130)',
                     data: {{yAxis|safe}},
                 }]
             },
 
             // Configuration options go here
-            options: {}
+            options: chartOptions
         });
     </script>
 
@@ -135,19 +185,13 @@
         data: {
                 labels: {{xAxis|safe}},
                 datasets: [{
-                    label: 'counts',
+                    label: 'retweet_count',
                     backgroundColor: [
-                        'rgb(80, 211, 130)',
-                        'rgb(146, 255, 32)',
-                        'rgb(14, 55, 22)',
-                        'rgb(46, 5, 132)',
-                        'rgb(6, 155, 232)',
-                        'rgb(200, 255, 100)',
-                        'rgb(180, 55, 250)',
+                        'rgb(180, 211, 130)',
                     ],
                     borderColor: [
                         'rgb(255, 95, 232)'],
-                    borderDash: [5, 5],
+                    borderDash: [1, 1],
                     fill: false,
                     data: {{yAxis|safe}},
                 }]
@@ -158,33 +202,78 @@
     </script>
 
     <script>
-        // And for a doughnut chart
-        var ctx3 = document.getElementById('doughnut').getContext('2d');
+        var ctx3 = document.getElementById('lineChart2').getContext('2d');
 
-        var myDoughnutChart = new Chart(ctx3, {
-        type: 'doughnut',
-        
+        var myLineChart = new Chart(ctx3, {
+        type: 'line',
+
         data: {
-                labels: {{xAxis|safe}},
+                labels: {{xValues|safe}},
                 datasets: [{
-                    label: 'counts',
+                    label: 'friends_count',
                     backgroundColor: [
-                        'rgb(14, 55, 22)',
-                        'rgb(6, 155, 232)',
-                        'rgb(14, 255, 32)',
-                        'rgb(79, 211, 120)',
-                        'rgb(200, 255, 100)',
-                        'rgb(180, 55, 250)',
-                        'rgb(8, 21, 130)',
-                        'rgb(146, 255, 32)',
-
-                        ],
-                    borderColor: 'rgb(180, 121, 48)',
-                    data: {{yAxis|safe}},
+                        'rgb(200, 111, 130)',
+                    ],
+                    borderColor: [
+                        'rgb(55, 195, 32)'],
+                    borderDash: [],
+                    fill: false,
+                    data: {{yValues|safe}},
                 }]
             },
 
         options: {}
-    });
+        });
+    </script>
+
+    <script>
+        var ctx4 = document.getElementById('myChart2').getContext('2d');
+
+        var chartOptions = {
+            legend: {
+                display: true,
+            },
+            scales: {
+                xAxes: [
+                    {barPercentage:1},
+                    //{ticks: {display:false}},
+                    //{ticks: {mirror: false}},
+                    //{display: false},
+                ],
+                yAxes: [
+                    //{barPercentage: 1},
+                    //{gridLines:{drawBorder: false}},
+                    //{ticks: {display:false}},
+                    //{ticks: {mirror: true}},
+                    //{display: false},
+                ],
+                elements: {
+                    rectangle: {
+                        borderSkipped: 'right',
+                    }
+                }
+            }
+        };
+        
+        var chart = new Chart(ctx4, {
+            // The type of chart we want to create
+            type: 'bar',
+
+            // The data for our dataset
+            data: {
+                labels: {{xValues|safe}},
+                datasets: [{
+                    label: [
+                        'friends_count',
+                    ],
+                    backgroundColor: 'rgb(200, 75, 82)',
+                    borderColor: 'rgb(120, 61, 230)',
+                    data: {{yValues|safe}},
+                }]
+            },
+
+            // Configuration options go here
+            options: chartOptions
+        });
     </script>
 </html>

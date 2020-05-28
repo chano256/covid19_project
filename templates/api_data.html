@@ -59,30 +59,21 @@
         </div>
 
         <div class="col-lg-12" style="max-width: 1200px;">
-            <div class="col-lg-3" style="float: left; max-height: 650px; max-width: 250px; overflow: hidden; overflow-x: hidden;">
+            <div class="col-lg-3" style="float: left; max-width: 250px;">
                 <h3 style="margin-left: 30px;">Contents</h1>
-                    <div class="content_list">
-                        <ul>
-                            <li><a href="/">Home</a></li>
-                            <li><a href="api_data">Api Data</a></li>
-                            <li><a href="showmap">Map</a></li>
-                            <li><a href="contact">Contact</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <ul class="form_list">
-                        <form method="POST" enctype="multipart/form-data" action="selecteditem">
-                            {% csrf_token %}
-                            {% for item in xAxis %}
-                                <li><input type="submit" value="{{item}}" name="item"></li>
-                            {% endfor %}
-                        </form>
+                <div class="content_list">
+                    <ul>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="api_data">Api Data</a></li>
+                        <li><a href="showmap">Map</a></li>                            <li><a href="contact">Contact</a></li>
                     </ul>
-                    </div>
+                </div>
             </div>
 
             <div class="col-lg-9" style="float: right; width: 950px; padding-top: 25px;">
-                
+                <div>
+                        {{ response|safe }}
+                </div>
             </div>
         </div>
     </body>

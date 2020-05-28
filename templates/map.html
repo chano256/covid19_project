@@ -227,16 +227,6 @@
                             <li><a href="contact">Contact</a></li>
                         </ul>
                     </div>
-                    <div>
-                        <ul class="form_list">
-                        <form method="POST" enctype="multipart/form-data" action="selecteditem">
-                            {% csrf_token %}
-                            {% for item in xAxis %}
-                                <li><input type="submit" value="{{item}}" name="item"></li>
-                            {% endfor %}
-                        </form>
-                    </ul>
-                    </div>
             </div>
 
             <div class="col-lg-9" style="float: right; width: 950px; padding-top: 25px;">
