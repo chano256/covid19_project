@@ -1,5 +1,5 @@
 pandas==1.0.3
-Django==3.0.6
+django>=3.0.6
 notebook==.0.3
 numpy==1.18.4
 matplotlib==3.2.1
